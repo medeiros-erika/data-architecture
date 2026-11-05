@@ -43,6 +43,7 @@ Lista de trabalho, sem ordem nem prazo. Edite livremente.
 ```
 index.html                     hub: lista os módulos
 artigo.html                    redirecionamento (link antigo)
+assets/                        imagens compartilhadas (foto da bio)
 modules/
   <slug>/                      um diretório por módulo
     index.html                 mapa interativo

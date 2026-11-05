@@ -19,7 +19,14 @@ h1{font-size:clamp(28px,5vw,40px);line-height:1.15;margin:0 0 8px}
 .card p{margin:0;color:var(--muted)}
 .links{margin-top:auto;padding-top:8px;display:flex;gap:16px;font-weight:600}
 .links a{color:var(--accent)}
-.foot{margin-top:48px;color:var(--muted);font-size:14px}
+.bio{display:flex;gap:20px;align-items:center;margin-top:48px;padding:24px;border:1px solid var(--line);border-radius:12px;background:#F8F5F1}
+.bio img{width:96px;height:96px;border-radius:50%;object-fit:cover;flex:0 0 auto;border:3px solid var(--card)}
+.bio h2{font-size:20px;margin:0}
+.bio .role{margin:0 0 8px;color:var(--accent);font-weight:600}
+.bio p{margin:0 0 8px}
+.bio .links{margin-top:4px;padding:0}
+@media (max-width:520px){.bio{flex-direction:column;align-items:flex-start}}
+.foot{margin-top:32px;color:var(--muted);font-size:14px}
 </style>
 </head>
 <body>
@@ -34,7 +41,16 @@ h1{font-size:clamp(28px,5vw,40px);line-height:1.15;margin:0 0 8px}
       <div class="links"><a href="modules/dbt-self-service/">Mapa interativo</a><a href="modules/dbt-self-service/artigo.html">Artigo</a></div>
     </article>
   </div>
-  <p class="foot">Erika Medeiros · Analytics Engineering</p>
+  <section class="bio" aria-labelledby="sobre">
+    <img src="assets/erika.jpg" alt="Foto de Erika Medeiros" width="96" height="96">
+    <div>
+      <h2 id="sobre">Erika Medeiros</h2>
+      <p class="role">Data &amp; Analytics Engineer</p>
+      <p>Trabalho com analytics engineering e arquitetura de soluções de dados. Criei este guia para registrar e compartilhar o que aprendo na prática ao desenhar plataformas em que várias pessoas e sistemas consomem a mesma definição de negócio.</p>
+      <div class="links"><a href="https://www.linkedin.com/in/medeiros-erika/">LinkedIn</a><a href="https://github.com/medeiros-erika">GitHub</a></div>
+    </div>
+  </section>
+  <p class="foot">Guia em evolução: novos módulos e revisões entram ao longo do tempo.</p>
 </main>
 </body>
 </html>
