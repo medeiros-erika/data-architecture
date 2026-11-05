@@ -6,14 +6,14 @@
 <title>Do dado bruto ao autosserviço</title>
 <meta name="description" content="Seis decisões de arquitetura com dbt para o autosserviço de dados funcionar quando o time cresce.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@100..125,500..900&family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;600&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700;900&family=Geist+Mono:wght@400;500;600&display=swap">
 <style>
 :root{
-  --bg:#FFFFFF; --card:#FFFFFF; --sunk:#F8F5F1; --ink:#2B1F30; --muted:#6B5E70; --line:#E2DAD2;
-  --c3:#5D3B66; --c4:#8A5F9B; --t3:rgba(93,59,102,.10);
-  --f-display:"Archivo","Source Sans 3",system-ui,sans-serif;
-  --f-body:"Source Sans 3",system-ui,-apple-system,"Segoe UI",sans-serif;
-  --f-mono:"JetBrains Mono",ui-monospace,SFMono-Regular,Consolas,monospace;
+  --bg:#FFFFFF; --card:#FFFFFF; --sunk:#F7F3F2; --ink:#333131; --muted:#68615A; --line:#E4E0DD;
+  --c3:#7E527A; --c4:#94632B; --t3:rgba(126,82,122,.10);
+  --f-display:"Geist",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --f-body:"Geist",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --f-mono:"Geist Mono",ui-monospace,SFMono-Regular,Consolas,monospace;
   color-scheme:light;
 }
 *{box-sizing:border-box}
@@ -23,12 +23,12 @@ body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--f-body);fo
 .sitenav a{color:var(--muted);text-decoration:none;padding-bottom:4px;border-bottom:2px solid transparent}
 .sitenav a[aria-current]{color:var(--ink);border-color:var(--c3)}
 .eyebrow{font-family:var(--f-mono);font-size:12px;color:var(--c3);font-weight:600}
-h1{font-family:var(--f-display);font-stretch:118%;font-weight:850;font-size:clamp(34px,6vw,54px);line-height:1;letter-spacing:-.025em;margin:10px 0 16px;text-wrap:balance}
+h1{font-family:var(--f-display);font-weight:850;font-size:clamp(34px,6vw,54px);line-height:1;letter-spacing:-.025em;margin:10px 0 16px;text-wrap:balance}
 .dek{font-size:21px;color:var(--muted);margin:0 0 14px}
 .by{font-size:15px;color:var(--muted);padding-bottom:28px;border-bottom:1px solid var(--line);margin-bottom:32px}
 .by b{color:var(--ink)}
-h2{font-family:var(--f-display);font-stretch:115%;font-weight:800;font-size:30px;line-height:1.1;letter-spacing:-.015em;margin:56px 0 14px;text-wrap:balance}
-h3{font-family:var(--f-display);font-stretch:110%;font-weight:750;font-size:22px;line-height:1.2;margin:40px 0 8px;text-wrap:balance}
+h2{font-family:var(--f-display);font-weight:800;font-size:30px;line-height:1.1;letter-spacing:-.015em;margin:56px 0 14px;text-wrap:balance}
+h3{font-family:var(--f-display);font-weight:750;font-size:22px;line-height:1.2;margin:40px 0 8px;text-wrap:balance}
 h3 span{font-family:var(--f-mono);font-size:15px;color:var(--c4);margin-right:8px}
 p{margin:0 0 18px}
 ul,ol{margin:0 0 20px;padding-left:24px}

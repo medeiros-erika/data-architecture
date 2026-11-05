@@ -72,7 +72,7 @@ Site estático, sem build. Publicado com GitHub Pages a partir da branch `main`,
 
 - Idioma: português do Brasil.
 - Nomes de modelos, métricas e números nas demos são exemplos e devem ser identificados como tais.
-- Visual claro, com fundo branco e a paleta da marca (`#5D3B66`, `#A784B5`, `#4E6E58`, `#8FB996`, `#F8F5F1`). Cada página funciona em tela de celular.
+- Visual claro, com fundo branco, tipografia Geist e paleta inspirada na Warren (neutros quentes `#333131`, `#F7F3F2`, `#E4E0DD` e acentos `#356D3E`, `#34639C`, `#7E527A`, `#94632B`, `#B23B51`). Cada página funciona em tela de celular.
 
 ## Autoria
 
