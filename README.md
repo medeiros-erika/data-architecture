@@ -71,7 +71,7 @@ Site estático, sem build. Publicado com GitHub Pages a partir da branch `main`,
 
 - Idioma: português do Brasil.
 - Nomes de modelos, métricas e números nas demos são exemplos e devem ser identificados como tais.
-- Cada página funciona em tema claro e escuro e em tela de celular.
+- Visual claro, com fundo branco e a paleta da marca (`#5D3B66`, `#A784B5`, `#4E6E58`, `#8FB996`, `#F8F5F1`). Cada página funciona em tela de celular.
 
 ## Autoria
 

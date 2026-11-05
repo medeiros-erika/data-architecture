@@ -12,7 +12,7 @@
 <style>
 /* Layout: mapa de referência em 4 colunas (origem → plataforma dbt → camada de produto → autosserviço) + três faixas de base + princípios; cada bloco abre folha com texto e demo */
 :root{
-  --bg:#F8F5F1; --card:#FFFFFF; --sunk:#EFE9E2; --ink:#2B1F30; --muted:#6B5E70; --line:#E2DAD2;
+  --bg:#FFFFFF; --card:#FFFFFF; --sunk:#F8F5F1; --ink:#2B1F30; --muted:#6B5E70; --line:#E2DAD2;
   --c1:#4E6E58; --c2:#3C7A51; --c3:#5D3B66; --c4:#8A5F9B; --c5:#9A4F68;
   --ok:#4E6E58; --warn:#B7791F; --err:#B83A3E;
   --t1:rgba(78,110,88,.12); --t2:rgba(60,122,81,.12); --t3:rgba(93,59,102,.10); --t4:rgba(138,95,155,.13); --t5:rgba(154,79,104,.10);
@@ -21,18 +21,6 @@
   --f-body:"Source Sans 3",system-ui,-apple-system,"Segoe UI",sans-serif;
   --f-mono:"JetBrains Mono",ui-monospace,SFMono-Regular,Consolas,monospace;
 }
-@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
-  --bg:#1B141F; --card:#251C2A; --sunk:#2D2332; --ink:#F2EDE8; --muted:#B3A8B8; --line:#3C2F42;
-  --c1:#66A07A; --c2:#8FB996; --c3:#A784B5; --c4:#C9A9D6; --c5:#DB93AB;
-  --ok:#8FB996; --warn:#E3AC4E; --err:#EC6C70;
-  --t1:rgba(102,160,122,.16); --t2:rgba(143,185,150,.15); --t3:rgba(167,132,181,.17); --t4:rgba(201,169,214,.15); --t5:rgba(219,147,171,.15);
-  --shadow:0 1px 0 rgba(0,0,0,.3),0 12px 30px -16px rgba(0,0,0,.7); color-scheme:dark;}}
-:root[data-theme="dark"]{
-  --bg:#1B141F; --card:#251C2A; --sunk:#2D2332; --ink:#F2EDE8; --muted:#B3A8B8; --line:#3C2F42;
-  --c1:#66A07A; --c2:#8FB996; --c3:#A784B5; --c4:#C9A9D6; --c5:#DB93AB;
-  --ok:#8FB996; --warn:#E3AC4E; --err:#EC6C70;
-  --t1:rgba(102,160,122,.16); --t2:rgba(143,185,150,.15); --t3:rgba(167,132,181,.17); --t4:rgba(201,169,214,.15); --t5:rgba(219,147,171,.15);
-  --shadow:0 1px 0 rgba(0,0,0,.3),0 12px 30px -16px rgba(0,0,0,.7); color-scheme:dark;}
 
 *{box-sizing:border-box}
 body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:16px;line-height:1.5;-webkit-font-smoothing:antialiased}
