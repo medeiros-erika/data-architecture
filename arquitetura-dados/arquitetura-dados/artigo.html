@@ -1,0 +1,214 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Do dado bruto ao autosserviço</title>
+<meta name="description" content="Seis decisões de arquitetura com dbt para o autosserviço de dados funcionar quando o time cresce.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@100..125,500..900&family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+:root{
+  --bg:#F3F4F7; --card:#FFFFFF; --sunk:#E9EBF1; --ink:#141826; --muted:#5C6378; --line:#D9DCE6;
+  --c3:#4B4FA8; --c4:#C98A1B; --t3:rgba(75,79,168,.10);
+  --f-display:"Archivo","Source Sans 3",system-ui,sans-serif;
+  --f-body:"Source Sans 3",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --f-mono:"JetBrains Mono",ui-monospace,SFMono-Regular,Consolas,monospace;
+  color-scheme:light;
+}
+@media (prefers-color-scheme: dark){:root{
+  --bg:#0E111A; --card:#161A26; --sunk:#1C2130; --ink:#E7EAF2; --muted:#9AA1B5; --line:#2A3042;
+  --c3:#8C90E8; --c4:#E8AC45; --t3:rgba(140,144,232,.15); color-scheme:dark;}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:19px;line-height:1.65;-webkit-font-smoothing:antialiased}
+.wrap{max-width:740px;margin:0 auto;padding-block:32px 96px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.sitenav{display:flex;gap:18px;margin-bottom:40px;font-size:14px;font-weight:600}
+.sitenav a{color:var(--muted);text-decoration:none;padding-bottom:4px;border-bottom:2px solid transparent}
+.sitenav a[aria-current]{color:var(--ink);border-color:var(--c3)}
+.eyebrow{font-family:var(--f-mono);font-size:12px;color:var(--c3);font-weight:600}
+h1{font-family:var(--f-display);font-stretch:118%;font-weight:850;font-size:clamp(34px,6vw,54px);line-height:1;letter-spacing:-.025em;margin:10px 0 16px;text-wrap:balance}
+.dek{font-size:21px;color:var(--muted);margin:0 0 14px}
+.by{font-size:15px;color:var(--muted);padding-bottom:28px;border-bottom:1px solid var(--line);margin-bottom:32px}
+.by b{color:var(--ink)}
+h2{font-family:var(--f-display);font-stretch:115%;font-weight:800;font-size:30px;line-height:1.1;letter-spacing:-.015em;margin:56px 0 14px;text-wrap:balance}
+h3{font-family:var(--f-display);font-stretch:110%;font-weight:750;font-size:22px;line-height:1.2;margin:40px 0 8px;text-wrap:balance}
+h3 span{font-family:var(--f-mono);font-size:15px;color:var(--c4);margin-right:8px}
+p{margin:0 0 18px}
+ul,ol{margin:0 0 20px;padding-left:24px}
+li{margin-bottom:8px}
+code{font-family:var(--f-mono);font-size:.82em;background:var(--sunk);border:1px solid var(--line);border-radius:5px;padding:1px 5px}
+pre{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:16px;overflow-x:auto;font-family:var(--f-mono);font-size:14px;line-height:1.55;margin:0 0 20px}
+pre code{background:none;border:0;padding:0;font-size:inherit}
+.tbl{overflow-x:auto;margin:0 0 20px}
+table{border-collapse:collapse;width:100%;font-size:16px}
+th{text-align:left;font-size:13px;text-transform:uppercase;letter-spacing:.04em;color:var(--muted);padding:8px 10px;border-bottom:1px solid var(--line)}
+td{padding:9px 10px;border-bottom:1px solid var(--line)}
+figure{margin:28px 0 32px}
+figure .frame{overflow-x:auto;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px}
+figure svg{display:block;width:100%;min-width:560px;height:auto}
+figcaption{font-size:14px;color:var(--muted);margin-top:8px}
+.checks{list-style:none;padding:0}
+.checks li{display:grid;grid-template-columns:22px 1fr;gap:10px}
+.checks li::before{content:"";width:16px;height:16px;border:1.5px solid var(--c3);border-radius:4px;margin-top:6px}
+.cta{background:var(--t3);border:1px solid var(--c3);border-radius:14px;padding:18px 20px;margin:24px 0}
+.cta a{color:var(--c3);font-weight:700}
+a{color:var(--c3)}
+.bio{font-style:italic;color:var(--muted);border-top:1px solid var(--line);padding-top:20px;margin-top:40px;font-size:16px}
+/* diagram tokens */
+.d-box{fill:none;stroke:var(--muted);stroke-width:1.25}
+.d-ln{fill:none;stroke:var(--muted);stroke-width:1.25}
+.d-name{fill:var(--ink);font-weight:600;font-size:13px;font-family:var(--f-body)}
+.d-sub{fill:var(--muted);font-size:11.5px;font-family:var(--f-body)}
+.d-acc{fill:var(--t3);stroke:var(--c3);stroke-width:2}
+.d-band{fill:var(--sunk);stroke:var(--muted);stroke-width:1.25}
+.d-arrow{fill:var(--muted)}
+</style>
+</head>
+<body>
+<div class="wrap">
+<nav class="sitenav"><a href="./">Mapa</a><a href="artigo.html" aria-current="page">Artigo</a></nav>
+<article>
+<div class="eyebrow">arquitetura de dados · dbt · autosserviço</div>
+<h1>Do dado bruto ao autosserviço</h1>
+<p class="dek">Seis decisões de arquitetura com dbt para o autosserviço não virar uma planilha gigante com dashboards por cima.</p>
+<div class="by">por <b>Erika Medeiros</b> · Analytics Engineering</div>
+
+<p>Autosserviço de dados não falha por falta de ferramenta. Falha porque cada pessoa encontra um caminho diferente até o número, e cada caminho conta uma história diferente.</p>
+<p>Se você trabalha com dados há algum tempo, conhece a cena. A reunião começa, o time comercial traz uma receita, o financeiro traz outra, e os próximos 40 minutos viram uma auditoria ao vivo de qual <code>CASE WHEN</code> está certo. Ninguém está mentindo. Cada um só leu a tabela que achou mais perto.</p>
+<p>Eu costumo brincar que o meu cargo real é <b>Arquiteta da Paz entre Regras de Negócio e SQL</b>. A parte do SQL é a mais fácil. O difícil é garantir que, quando alguém se serve sozinho, ele pegue a definição certa sem precisar me chamar no chat.</p>
+<p>Neste artigo eu mostro como organizo um projeto dbt pensando nisso desde o primeiro modelo. Não é uma lista de boas práticas soltas. É um mapa, com camadas que têm um trabalho cada, e seis decisões que fazem esse mapa aguentar o crescimento do time.</p>
+<p>A versão interativa do mapa está na <a href="./">página inicial</a>, com uma demonstração para cada bloco.</p>
+
+<h2>O mapa em uma frase</h2>
+<p>O dado entra bruto, passa por três camadas de plataforma dbt, ganha uma camada de produto e só então chega em quem se serve sozinho.</p>
+<figure>
+<div class="frame">
+<svg viewBox="0 0 760 484" role="img" aria-label="O autosserviço começa na camada de produto">
+<defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" class="d-arrow"/></marker></defs>
+<text x="24" y="30" class="d-name" style="font-size:15px">O autosserviço começa na camada de produto</text>
+<text x="24" y="50" class="d-sub">Cada camada responde uma pergunta; quem consome lê só a última</text>
+<g class="d-ln">
+<path d="M136 180H158" marker-end="url(#ar)"/><path d="M272 180H294" marker-end="url(#ar)"/><path d="M424 180H446" marker-end="url(#ar)"/><path d="M552 180H574" marker-end="url(#ar)"/>
+<path d="M360 216V246" marker-end="url(#ar)"/><path d="M424 276H500V218" marker-end="url(#ar)"/>
+<path d="M656 284V316"/><path d="M104 316H656"/>
+<path d="M104 316V338" marker-end="url(#ar)"/><path d="M280 316V338" marker-end="url(#ar)"/><path d="M456 316V338" marker-end="url(#ar)"/><path d="M632 316V338" marker-end="url(#ar)"/>
+</g>
+<g text-anchor="middle">
+<rect x="24" y="144" width="112" height="72" rx="8" class="d-box"/><text x="80" y="168" class="d-name">Origens</text><text x="80" y="184" class="d-sub">ERP, CDC, SaaS</text><text x="80" y="200" class="d-sub">e eventos</text>
+<rect x="160" y="144" width="112" height="72" rx="8" class="d-box"/><text x="216" y="168" class="d-name">Staging</text><text x="216" y="184" class="d-sub">o que chegou</text><text x="216" y="200" class="d-sub">da origem</text>
+<rect x="296" y="144" width="128" height="72" rx="8" class="d-box"/><text x="360" y="168" class="d-name">Intermediate</text><text x="360" y="184" class="d-sub">regra de negócio</text><text x="360" y="200" class="d-sub">escrita uma vez</text>
+<rect x="448" y="144" width="104" height="72" rx="8" class="d-box"/><text x="500" y="168" class="d-name">Marts</text><text x="500" y="184" class="d-sub">fatos e</text><text x="500" y="200" class="d-sub">dimensões</text>
+<rect x="296" y="248" width="128" height="56" rx="8" class="d-box"/><text x="360" y="272" class="d-name">Snapshots</text><text x="360" y="288" class="d-sub">histórico SCD2</text>
+<rect x="576" y="76" width="160" height="208" rx="8" class="d-acc"/><text x="656" y="98" class="d-name" style="font-size:11.5px">Camada de produto</text>
+<rect x="592" y="108" width="128" height="72" rx="8" class="d-box"/><text x="656" y="132" class="d-name">Semântica</text><text x="656" y="148" class="d-sub">métrica com uma</text><text x="656" y="164" class="d-sub">definição só</text>
+<rect x="592" y="196" width="128" height="72" rx="8" class="d-box"/><text x="656" y="220" class="d-name">Data products</text><text x="656" y="236" class="d-sub">dono, contrato</text><text x="656" y="252" class="d-sub">e SLA</text>
+<rect x="24" y="340" width="160" height="56" rx="8" class="d-box"/><text x="104" y="364" class="d-name">Analistas</text><text x="104" y="380" class="d-sub">BI e exploração</text>
+<rect x="200" y="340" width="160" height="56" rx="8" class="d-box"/><text x="280" y="364" class="d-name">Cientistas</text><text x="280" y="380" class="d-sub">notebooks</text>
+<rect x="376" y="340" width="160" height="56" rx="8" class="d-box"/><text x="456" y="364" class="d-name">Agentes de IA</text><text x="456" y="380" class="d-sub">perguntas via MCP</text>
+<rect x="552" y="340" width="160" height="56" rx="8" class="d-box"/><text x="632" y="364" class="d-name">Sistemas</text><text x="632" y="380" class="d-sub">API e reverse ETL</text>
+<rect x="24" y="420" width="712" height="40" rx="8" class="d-band"/><text x="380" y="444" class="d-name" style="font-weight:400">Por baixo de tudo: CI/CD, qualidade e governança</text>
+</g>
+<text x="24" y="308" class="d-sub">o autosserviço lê só a camada de produto</text>
+</svg>
+</div>
+<figcaption>Mapa da arquitetura: 5 camadas, 4 formas de consumo.</figcaption>
+</figure>
+<p>Parece óbvio dito assim. O pulo do gato está em que <b>cada camada responde uma pergunta só</b>, e nenhuma faz o trabalho da outra:</p>
+<ol>
+<li><b>Staging</b> responde: o que chegou da origem, exatamente?</li>
+<li><b>Intermediate</b> responde: qual é a regra de negócio?</li>
+<li><b>Marts</b> respondem: como o negócio se organiza em fatos e dimensões?</li>
+<li><b>Camada semântica</b> responde: qual é a fórmula oficial de cada métrica?</li>
+<li><b>Data products</b> respondem: em quais tabelas eu posso confiar sem perguntar a ninguém?</li>
+</ol>
+<p>Ao lado disso, os <b>snapshots</b> guardam o histórico, e três coisas ficam por baixo de tudo: CI/CD, qualidade e governança.</p>
+<p>Do outro lado do mapa estão quatro jeitos de consumir: analistas no BI, cientistas em notebooks, agentes de IA perguntando via MCP e sistemas puxando por API. A regra que segura tudo é simples: <b>ninguém fora do time de dados lê staging ou intermediate</b>. O autosserviço começa na camada de produto.</p>
+
+<h2>As seis decisões</h2>
+
+<h3><span>01</span>Cada camada isola um tipo de mudança</h3>
+<p>A pergunta que eu faço para validar qualquer arquitetura é: <b>quando algo mudar, quantos arquivos eu vou abrir?</b></p>
+<p>Mudou o schema da origem? Mexo só na staging. Mudou a regra de negócio? Mexo só na intermediate. Mudou o formato que o consumidor precisa? Mexo só no mart.</p>
+<p>Um exemplo bem comum: a área decide que "cliente ativo" agora é quem comprou nos últimos 60 dias, e não mais 90. Se essa regra estiver copiada em quatro marts, são quatro PRs e o risco de esquecer um. Aí vocês passam a ter dois números de clientes ativos convivendo no mesmo dashboard. Se a regra estiver numa intermediate como <code>int_cliente_classificado</code>, é um arquivo. Os quatro marts herdam no próximo build.</p>
+<p><b>Na prática:</b> se você achar o mesmo <code>CASE WHEN</code> em dois marts, ele está no lugar errado.</p>
+
+<h3><span>02</span>A materialização segue o comportamento da origem</h3>
+<p>Esta é a decisão que mais vejo ser tomada no automático. Alguém define "tudo incremental para economizar" e o projeto inteiro herda.</p>
+<p>Antes de escolher a materialização, eu faço uma pergunta à origem: <b>como eu descubro que algo deixou de existir?</b></p>
+<ul>
+<li><b>Eventos com <code>updated_at</code> confiável</b> (ERP, logs de transação) → incremental com merge, filtrando por timestamp com um lookback curto para pegar quem chegou atrasado.</li>
+<li><b>Tabela que sobrescreve a linha</b> (snapshot de posição de um SaaS, por exemplo) → aqui mora a armadilha. Quando um registro é quitado ou removido, a linha simplesmente some. Um filtro incremental nunca vê uma ausência. A saída é full refresh na intermediate e histórico guardado em snapshot.</li>
+<li><b>CDC com operação e ordem</b> → merge por chave, aplicando insert, update e delete na ordem do log, e tratando delete como status, não como remoção física.</li>
+<li><b>Eventos append-only de alto volume</b> → incremental só com append, particionado por data.</li>
+</ul>
+<p>Não existe uma materialização certa para o projeto. Existe a certa para cada origem.</p>
+
+<h3><span>03</span>Histórico é uma responsabilidade explícita</h3>
+<p>Se a origem só conhece o estado atual, o histórico não vai aparecer sozinho. Alguém precisa ser dono dele, e no dbt esse dono é o <b>snapshot</b>.</p>
+<p>O snapshot grava uma versão nova cada vez que um campo rastreado muda. Com <code>strategy='check'</code>, você nem precisa de um <code>updated_at</code> confiável na origem. Pense num cliente que muda de plano em março e cancela em agosto. A origem só sabe que hoje ele está cancelado. O snapshot sabe que em junho ele era Pro.</p>
+<p>Dois cuidados que aprendi na prática:</p>
+<ul>
+<li><b>Escolha bem os <code>check_cols</code>.</b> Um campo que muda todo dia sem evento de negócio, como dias de atraso ou idade, cria uma versão nova por dia. Você paga armazenamento para guardar ruído.</li>
+<li><b>Use o snapshot para descobrir datas que a origem não tem.</b> Se a origem não registra quando algo foi quitado, o <code>dbt_valid_from</code> da versão com status "quitado" te dá essa data.</li>
+</ul>
+<p>O bônus: com o histórico garantido no snapshot, todos os modelos acima dele viram descartáveis. Qualquer mart pode ser reconstruído com full refresh sem perder nada.</p>
+
+<h3><span>04</span>Uma métrica, uma definição</h3>
+<p>Volta para a reunião do começo. Por que o comercial e o financeiro trouxeram receitas diferentes? Porque o dashboard fazia <code>sum(vl_bruto)</code>, o notebook fazia <code>sum(vl_bruto - vl_desconto)</code> e o agente de IA filtrava só pedidos pagos. Três fórmulas, três números, todos "certos".</p>
+<p>A camada semântica resolve isso tirando a fórmula da ferramenta e colocando no repositório:</p>
+<pre><code>metrics:
+  - name: receita_liquida
+    description: "Bruto menos descontos, pedidos pagos"
+    type: derived
+    expr: receita_bruta - descontos</code></pre>
+<p>Agora a métrica é código. Passa por PR, tem revisão, tem teste. O BI, o notebook e o agente pedem <code>receita_liquida</code> pelo nome e recebem o mesmo número. Se ele estiver errado, está errado num lugar só, e você corrige num lugar só.</p>
+<p>E tem um efeito colateral que ficou enorme com a IA: <b>a descrição das métricas é exatamente o contexto que um agente precisa para acertar a pergunta</b>. Um agente lendo tabela crua adivinha o que é receita. Um agente lendo a camada semântica sabe.</p>
+
+<h3><span>05</span>Autosserviço só em tabela certificada</h3>
+<p>Nem toda tabela do projeto deveria estar à vista. Eu separo o que é interno do time de dados do que é <b>data product</b>: uma tabela com dono, contrato e SLA, que qualquer pessoa pode usar sem pedir ajuda.</p>
+<p>Para decidir se uma tabela está pronta, uso um scorecard simples de seis critérios:</p>
+<div class="tbl"><table>
+<thead><tr><th>Critério</th><th>Como verificar</th></tr></thead>
+<tbody>
+<tr><td>Dono nomeado</td><td><code>meta: owner</code> preenchido no YAML</td></tr>
+<tr><td>Documentação</td><td>descrição da tabela e de todas as colunas</td></tr>
+<tr><td>Testes de chave e grão</td><td><code>unique</code> e <code>not_null</code> na chave primária</td></tr>
+<tr><td>Contrato de schema</td><td><code>contract: enforced: true</code></td></tr>
+<tr><td>SLA de freshness</td><td>combinado com quem consome</td></tr>
+<tr><td>Versionamento</td><td>v1 e v2 com período de transição</td></tr>
+</tbody></table></div>
+<p>Com três critérios, a tabela é <b>bronze</b>: uso interno do domínio. Com quatro ou cinco, é <b>prata</b>: entra no catálogo com aviso de que pode mudar. Com os seis, é <b>ouro</b>: pronta para autosserviço e para sistemas consumirem.</p>
+<p>O critério que mais faz diferença é o contrato. Com ele, quem quebra o schema é o PR, e não o dashboard de alguém na segunda-feira de manhã.</p>
+
+<h3><span>06</span>Todo erro tem dono pela camada</h3>
+<p>Pipeline vai quebrar. A pergunta não é se, é quem corrige. E a camada onde o erro nasceu responde isso:</p>
+<ul>
+<li><b>Erro de modelagem</b> (duplicidade num mart, regra errada) → Analytics Engineering abre PR.</li>
+<li><b>Erro de ingestão</b> (fonte atrasada, sync que falhou) → Data Engineering.</li>
+<li><b>Gap na origem</b> (campo obrigatório chegando nulo) → volta para o time da aplicação.</li>
+</ul>
+<p>Junto com isso, uso severidade graduada nos testes. <code>error</code> só no que é crítico: as fontes e chaves que, se quebradas, invalidam tudo o que vem depois. O resto é <code>warn</code>, que avisa, registra e deixa o pipeline seguir. Um projeto onde tudo é <code>error</code> para por qualquer coisa, e o time aprende a ignorar alertas.</p>
+<p>E vale colocar no checklist de review os bugs que se repetem. O meu favorito: <code>coalesce(col, ' ')</code> com espaço, em vez de string vazia, dentro de uma surrogate key. Muda o hash, a chave nunca bate e o merge vira um insert eterno. Parece detalhe até você passar uma tarde inteira procurando.</p>
+
+<h2>Por onde começar amanhã</h2>
+<p>Você não precisa reescrever o projeto. Comece medindo onde ele está:</p>
+<ul class="checks">
+<li>Procure o mesmo <code>CASE WHEN</code> em mais de um mart. Cada repetição é uma intermediate esperando para existir.</li>
+<li>Para cada origem, responda: como eu descubro que algo deixou de existir? Confira se a materialização bate com a resposta.</li>
+<li>Liste as tabelas que alguém fora do time de dados lê hoje. Quantas têm dono, contrato e testes de chave?</li>
+<li>Escolha a métrica que mais gera discussão em reunião e leve para a camada semântica primeiro.</li>
+<li>Revise a severidade dos testes. Se tudo é <code>error</code>, rebaixe o que não invalida o resto.</li>
+<li>Escreva quem corrige o quê, por camada, num lugar onde o time inteiro veja.</li>
+</ul>
+<p>Uma mudança por sprint já muda o jogo em poucos meses.</p>
+
+<h2>Fechando</h2>
+<p>Autosserviço não é dar acesso ao banco e torcer. É decidir, com antecedência, por qual caminho cada pessoa chega ao número, e garantir que todos os caminhos passem pela mesma definição.</p>
+<p>As camadas dão o lugar de cada coisa. As seis decisões fazem esse lugar continuar fazendo sentido quando o time dobra, quando a regra muda e quando um agente de IA começa a fazer perguntas no lugar de um analista.</p>
+<div class="cta">Explore o <a href="./">mapa interativo</a>: o simulador de materialização, o antes e depois da camada semântica, o scorecard de data product e o roteamento de incidentes.</div>
+<p>E me conta: qual dessas seis decisões mais falta no seu projeto hoje?</p>
+<p class="bio">Erika Medeiros é Analytics Engineer especializada em crédito e arquitetura de dados com dbt e Databricks.</p>
+</article>
+</div>
+</body>
+</html>
