@@ -1,6 +1,6 @@
 # Guia de arquitetura de soluções para analytics engineering
 
-Guia vivo, escrito por **Erika Medeiros**, sobre como projetar soluções de dados em que analytics engineering é o centro: do dado bruto ao consumo por pessoas, sistemas e agentes de IA, todos sobre a mesma definição de negócio.
+Guia vivo, escrito por **Erika Medeiros**, sobre como projetar soluções de dados em que analytics engineering é o centro: do raw data ao consumo por pessoas, sistemas e agentes de IA, todos sobre a mesma definição de negócio.
 
 Criei este guia para **compartilhar a minha experiência** com arquitetura de soluções em analytics engineering. Ele reflete o que vivi na prática, as decisões que tomei e o que aprendi com elas. Não é manual definitivo nem receita única: está em evolução, e cada módulo é revisado conforme eu aprendo mais. Se algo aqui fizer você pensar diferente, a conversa é bem-vinda.
 
@@ -11,8 +11,8 @@ Publicado em https://medeiros-erika.github.io/data-architecture/
 Arquitetura de soluções, vista a partir de analytics engineering. O foco não é a ferramenta, e sim as decisões de desenho que fazem uma plataforma de dados escalar sem virar gargalo:
 
 - **Uma definição de negócio, vários consumidores.** Métricas e regras vivem em um só lugar, e analistas, cientistas, sistemas e agentes de IA se servem dele.
-- **Autosserviço com governança.** Quem consome não depende de quem constrói, e quem constrói não perde o controle do que é publicado.
-- **Dado tratado como produto.** Dono, contrato, qualidade e prontidão explícitos, não apenas tabelas.
+- **Self-service com governança.** Quem consome não depende de quem constrói, e quem constrói não perde o controle do que é publicado.
+- **Dado tratado como produto.** Owner, contract, qualidade e prontidão explícitos, não apenas tabelas.
 - **Decisão justificada.** Cada módulo explica o raciocínio e os trade-offs, não só o resultado.
 
 ## Formato de cada módulo
@@ -26,15 +26,15 @@ Todo módulo segue o mesmo desenho, para o guia ficar coerente conforme cresce:
 
 | Módulo | Tema | Situação |
 |---|---|---|
-| [`dbt-self-service`](modules/dbt-self-service/) | Organizar um projeto dbt para autosserviço: camadas, camada semântica, data products e consumo | Publicado |
+| [`dbt-self-service`](modules/dbt-self-service/) | Organizar um projeto dbt para self-service: camadas, semantic layer, data products e consumo | Publicado |
 
 ### Candidatos para os próximos módulos
 
 Lista de trabalho, sem ordem nem prazo. Edite livremente.
 
 - Observabilidade e resposta a incidentes de dados
-- Contratos de dados entre produtores e consumidores
-- Estratégia de materialização e custo
+- Data contracts entre produtores e consumidores
+- Estratégia de materialization e custo
 - Dado para agentes de IA: contexto, permissões e confiabilidade
 - Governança e papéis em times de dados
 

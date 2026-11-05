@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Do dado bruto ao autosserviço</title>
-<meta name="description" content="Seis decisões de arquitetura com dbt para o autosserviço de dados funcionar quando o time cresce.">
+<title>Do raw data ao self-service</title>
+<meta name="description" content="Seis decisões de arquitetura com dbt para o self-service de dados funcionar quando o time cresce.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700;900&family=Geist+Mono:wght@400;500;600&display=swap">
 <style>
@@ -65,24 +65,24 @@ a{color:var(--c3)}
 <div class="wrap">
 <nav class="sitenav"><a href="../../">Módulos</a><a href="./">Mapa</a><a href="artigo.html" aria-current="page">Artigo</a></nav>
 <article>
-<div class="eyebrow">arquitetura de dados · dbt · autosserviço</div>
-<h1>Do dado bruto ao autosserviço</h1>
-<p class="dek">Seis decisões de arquitetura com dbt para o autosserviço não virar uma planilha gigante com dashboards por cima.</p>
+<div class="eyebrow">arquitetura de dados · dbt · self-service</div>
+<h1>Do raw data ao self-service</h1>
+<p class="dek">Seis decisões de arquitetura com dbt para o self-service não virar uma planilha gigante com dashboards por cima.</p>
 <div class="by">por <b>Erika Medeiros</b> · Analytics Engineering</div>
 
-<p>Autosserviço de dados não falha por falta de ferramenta. Falha porque cada pessoa encontra um caminho diferente até o número, e cada caminho conta uma história diferente.</p>
+<p>Self-service de dados não falha por falta de ferramenta. Falha porque cada pessoa encontra um caminho diferente até o número, e cada caminho conta uma história diferente.</p>
 <p>Se você trabalha com dados há algum tempo, conhece a cena. A reunião começa, o time comercial traz uma receita, o financeiro traz outra, e os próximos 40 minutos viram uma auditoria ao vivo de qual <code>CASE WHEN</code> está certo. Ninguém está mentindo. Cada um só leu a tabela que achou mais perto.</p>
 <p>Eu costumo brincar que o meu cargo real é <b>Arquiteta da Paz entre Regras de Negócio e SQL</b>. A parte do SQL é a mais fácil. O difícil é garantir que, quando alguém se serve sozinho, ele pegue a definição certa sem precisar me chamar no chat.</p>
 <p>Neste artigo eu mostro como organizo um projeto dbt pensando nisso desde o primeiro modelo. Não é uma lista de boas práticas soltas. É um mapa, com camadas que têm um trabalho cada, e seis decisões que fazem esse mapa aguentar o crescimento do time.</p>
 <p>A versão interativa do mapa está na <a href="./">página inicial</a>, com uma demonstração para cada bloco.</p>
 
 <h2>O mapa em uma frase</h2>
-<p>O dado entra bruto, passa por três camadas de plataforma dbt, ganha uma camada de produto e só então chega em quem se serve sozinho.</p>
+<p>O dado entra como raw data, passa por três camadas de plataforma dbt, ganha uma camada de produto e só então chega em quem se serve sozinho.</p>
 <figure>
 <div class="frame">
-<svg viewBox="0 0 760 484" role="img" aria-label="O autosserviço começa na camada de produto">
+<svg viewBox="0 0 760 484" role="img" aria-label="O self-service começa na camada de produto">
 <defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" class="d-arrow"/></marker></defs>
-<text x="24" y="30" class="d-name" style="font-size:15px">O autosserviço começa na camada de produto</text>
+<text x="24" y="30" class="d-name" style="font-size:15px">O self-service começa na camada de produto</text>
 <text x="24" y="50" class="d-sub">Cada camada responde uma pergunta; quem consome lê só a última</text>
 <g class="d-ln">
 <path d="M136 180H158" marker-end="url(#ar)"/><path d="M272 180H294" marker-end="url(#ar)"/><path d="M424 180H446" marker-end="url(#ar)"/><path d="M552 180H574" marker-end="url(#ar)"/>
@@ -91,118 +91,118 @@ a{color:var(--c3)}
 <path d="M104 316V338" marker-end="url(#ar)"/><path d="M280 316V338" marker-end="url(#ar)"/><path d="M456 316V338" marker-end="url(#ar)"/><path d="M632 316V338" marker-end="url(#ar)"/>
 </g>
 <g text-anchor="middle">
-<rect x="24" y="144" width="112" height="72" rx="8" class="d-box"/><text x="80" y="168" class="d-name">Origens</text><text x="80" y="184" class="d-sub">ERP, CDC, SaaS</text><text x="80" y="200" class="d-sub">e eventos</text>
-<rect x="160" y="144" width="112" height="72" rx="8" class="d-box"/><text x="216" y="168" class="d-name">Staging</text><text x="216" y="184" class="d-sub">o que chegou</text><text x="216" y="200" class="d-sub">da origem</text>
+<rect x="24" y="144" width="112" height="72" rx="8" class="d-box"/><text x="80" y="168" class="d-name">Sources</text><text x="80" y="184" class="d-sub">ERP, CDC, SaaS</text><text x="80" y="200" class="d-sub">e eventos</text>
+<rect x="160" y="144" width="112" height="72" rx="8" class="d-box"/><text x="216" y="168" class="d-name">Staging</text><text x="216" y="184" class="d-sub">o que chegou</text><text x="216" y="200" class="d-sub">da source</text>
 <rect x="296" y="144" width="128" height="72" rx="8" class="d-box"/><text x="360" y="168" class="d-name">Intermediate</text><text x="360" y="184" class="d-sub">regra de negócio</text><text x="360" y="200" class="d-sub">escrita uma vez</text>
 <rect x="448" y="144" width="104" height="72" rx="8" class="d-box"/><text x="500" y="168" class="d-name">Marts</text><text x="500" y="184" class="d-sub">fatos e</text><text x="500" y="200" class="d-sub">dimensões</text>
 <rect x="296" y="248" width="128" height="56" rx="8" class="d-box"/><text x="360" y="272" class="d-name">Snapshots</text><text x="360" y="288" class="d-sub">histórico SCD2</text>
 <rect x="576" y="76" width="160" height="208" rx="8" class="d-acc"/><text x="656" y="98" class="d-name" style="font-size:11.5px">Camada de produto</text>
-<rect x="592" y="108" width="128" height="72" rx="8" class="d-box"/><text x="656" y="132" class="d-name">Semântica</text><text x="656" y="148" class="d-sub">métrica com uma</text><text x="656" y="164" class="d-sub">definição só</text>
-<rect x="592" y="196" width="128" height="72" rx="8" class="d-box"/><text x="656" y="220" class="d-name">Data products</text><text x="656" y="236" class="d-sub">dono, contrato</text><text x="656" y="252" class="d-sub">e SLA</text>
+<rect x="592" y="108" width="128" height="72" rx="8" class="d-box"/><text x="656" y="132" class="d-name">Semantic layer</text><text x="656" y="148" class="d-sub">métrica com uma</text><text x="656" y="164" class="d-sub">definição só</text>
+<rect x="592" y="196" width="128" height="72" rx="8" class="d-box"/><text x="656" y="220" class="d-name">Data products</text><text x="656" y="236" class="d-sub">owner, contract</text><text x="656" y="252" class="d-sub">e SLA</text>
 <rect x="24" y="340" width="160" height="56" rx="8" class="d-box"/><text x="104" y="364" class="d-name">Analistas</text><text x="104" y="380" class="d-sub">BI e exploração</text>
 <rect x="200" y="340" width="160" height="56" rx="8" class="d-box"/><text x="280" y="364" class="d-name">Cientistas</text><text x="280" y="380" class="d-sub">notebooks</text>
 <rect x="376" y="340" width="160" height="56" rx="8" class="d-box"/><text x="456" y="364" class="d-name">Agentes de IA</text><text x="456" y="380" class="d-sub">perguntas via MCP</text>
 <rect x="552" y="340" width="160" height="56" rx="8" class="d-box"/><text x="632" y="364" class="d-name">Sistemas</text><text x="632" y="380" class="d-sub">API e reverse ETL</text>
-<rect x="24" y="420" width="712" height="40" rx="8" class="d-band"/><text x="380" y="444" class="d-name" style="font-weight:400">Por baixo de tudo: CI/CD, qualidade e governança</text>
+<rect x="24" y="420" width="712" height="40" rx="8" class="d-band"/><text x="380" y="444" class="d-name" style="font-weight:400">Por baixo de tudo: CI/CD, data quality e governança</text>
 </g>
-<text x="24" y="308" class="d-sub">o autosserviço lê só a camada de produto</text>
+<text x="24" y="308" class="d-sub">o self-service lê só a camada de produto</text>
 </svg>
 </div>
 <figcaption>Mapa da arquitetura: 5 camadas, 4 formas de consumo.</figcaption>
 </figure>
 <p>Parece óbvio dito assim. O pulo do gato está em que <b>cada camada responde uma pergunta só</b>, e nenhuma faz o trabalho da outra:</p>
 <ol>
-<li><b>Staging</b> responde: o que chegou da origem, exatamente?</li>
+<li><b>Staging</b> responde: o que chegou da source, exatamente?</li>
 <li><b>Intermediate</b> responde: qual é a regra de negócio?</li>
 <li><b>Marts</b> respondem: como o negócio se organiza em fatos e dimensões?</li>
-<li><b>Camada semântica</b> responde: qual é a fórmula oficial de cada métrica?</li>
+<li><b>Semantic layer</b> responde: qual é a fórmula oficial de cada métrica?</li>
 <li><b>Data products</b> respondem: em quais tabelas eu posso confiar sem perguntar a ninguém?</li>
 </ol>
-<p>Ao lado disso, os <b>snapshots</b> guardam o histórico, e três coisas ficam por baixo de tudo: CI/CD, qualidade e governança.</p>
-<p>Do outro lado do mapa estão quatro jeitos de consumir: analistas no BI, cientistas em notebooks, agentes de IA perguntando via MCP e sistemas puxando por API. A regra que segura tudo é simples: <b>ninguém fora do time de dados lê staging ou intermediate</b>. O autosserviço começa na camada de produto.</p>
+<p>Ao lado disso, os <b>snapshots</b> guardam o histórico, e três coisas ficam por baixo de tudo: CI/CD, data quality e governança.</p>
+<p>Do outro lado do mapa estão quatro jeitos de consumir: analistas no BI, cientistas em notebooks, agentes de IA perguntando via MCP e sistemas puxando por API. A regra que segura tudo é simples: <b>ninguém fora do time de dados lê staging ou intermediate</b>. O self-service começa na camada de produto.</p>
 
 <h2>As seis decisões</h2>
 
 <h3><span>01</span>Cada camada isola um tipo de mudança</h3>
 <p>A pergunta que eu faço para validar qualquer arquitetura é: <b>quando algo mudar, quantos arquivos eu vou abrir?</b></p>
-<p>Mudou o schema da origem? Mexo só na staging. Mudou a regra de negócio? Mexo só na intermediate. Mudou o formato que o consumidor precisa? Mexo só no mart.</p>
+<p>Mudou o schema da source? Mexo só na staging. Mudou a regra de negócio? Mexo só na intermediate. Mudou o formato que o consumidor precisa? Mexo só no mart.</p>
 <p>Um exemplo bem comum: a área decide que "cliente ativo" agora é quem comprou nos últimos 60 dias, e não mais 90. Se essa regra estiver copiada em quatro marts, são quatro PRs e o risco de esquecer um. Aí vocês passam a ter dois números de clientes ativos convivendo no mesmo dashboard. Se a regra estiver numa intermediate como <code>int_cliente_classificado</code>, é um arquivo. Os quatro marts herdam no próximo build.</p>
 <p><b>Na prática:</b> se você achar o mesmo <code>CASE WHEN</code> em dois marts, ele está no lugar errado.</p>
 
-<h3><span>02</span>A materialização segue o comportamento da origem</h3>
+<h3><span>02</span>A materialization segue o comportamento da source</h3>
 <p>Esta é a decisão que mais vejo ser tomada no automático. Alguém define "tudo incremental para economizar" e o projeto inteiro herda.</p>
-<p>Antes de escolher a materialização, eu faço uma pergunta à origem: <b>como eu descubro que algo deixou de existir?</b></p>
+<p>Antes de escolher a materialization, eu faço uma pergunta à source: <b>como eu descubro que algo deixou de existir?</b></p>
 <ul>
 <li><b>Eventos com <code>updated_at</code> confiável</b> (ERP, logs de transação) → incremental com merge, filtrando por timestamp com um lookback curto para pegar quem chegou atrasado.</li>
 <li><b>Tabela que sobrescreve a linha</b> (snapshot de posição de um SaaS, por exemplo) → aqui mora a armadilha. Quando um registro é quitado ou removido, a linha simplesmente some. Um filtro incremental nunca vê uma ausência. A saída é full refresh na intermediate e histórico guardado em snapshot.</li>
 <li><b>CDC com operação e ordem</b> → merge por chave, aplicando insert, update e delete na ordem do log, e tratando delete como status, não como remoção física.</li>
 <li><b>Eventos append-only de alto volume</b> → incremental só com append, particionado por data.</li>
 </ul>
-<p>Não existe uma materialização certa para o projeto. Existe a certa para cada origem.</p>
+<p>Não existe uma materialization certa para o projeto. Existe a certa para cada source.</p>
 
 <h3><span>03</span>Histórico é uma responsabilidade explícita</h3>
-<p>Se a origem só conhece o estado atual, o histórico não vai aparecer sozinho. Alguém precisa ser dono dele, e no dbt esse dono é o <b>snapshot</b>.</p>
-<p>O snapshot grava uma versão nova cada vez que um campo rastreado muda. Com <code>strategy='check'</code>, você nem precisa de um <code>updated_at</code> confiável na origem. Pense num cliente que muda de plano em março e cancela em agosto. A origem só sabe que hoje ele está cancelado. O snapshot sabe que em junho ele era Pro.</p>
+<p>Se a source só conhece o estado atual, o histórico não vai aparecer sozinho. Alguém precisa ser owner dele, e no dbt esse owner é o <b>snapshot</b>.</p>
+<p>O snapshot grava uma versão nova cada vez que um campo rastreado muda. Com <code>strategy='check'</code>, você nem precisa de um <code>updated_at</code> confiável na source. Pense num cliente que muda de plano em março e cancela em agosto. A source só sabe que hoje ele está cancelado. O snapshot sabe que em junho ele era Pro.</p>
 <p>Dois cuidados que aprendi na prática:</p>
 <ul>
 <li><b>Escolha bem os <code>check_cols</code>.</b> Um campo que muda todo dia sem evento de negócio, como dias de atraso ou idade, cria uma versão nova por dia. Você paga armazenamento para guardar ruído.</li>
-<li><b>Use o snapshot para descobrir datas que a origem não tem.</b> Se a origem não registra quando algo foi quitado, o <code>dbt_valid_from</code> da versão com status "quitado" te dá essa data.</li>
+<li><b>Use o snapshot para descobrir datas que a source não tem.</b> Se a source não registra quando algo foi quitado, o <code>dbt_valid_from</code> da versão com status "quitado" te dá essa data.</li>
 </ul>
 <p>O bônus: com o histórico garantido no snapshot, todos os modelos acima dele viram descartáveis. Qualquer mart pode ser reconstruído com full refresh sem perder nada.</p>
 
 <h3><span>04</span>Uma métrica, uma definição</h3>
 <p>Volta para a reunião do começo. Por que o comercial e o financeiro trouxeram receitas diferentes? Porque o dashboard fazia <code>sum(vl_bruto)</code>, o notebook fazia <code>sum(vl_bruto - vl_desconto)</code> e o agente de IA filtrava só pedidos pagos. Três fórmulas, três números, todos "certos".</p>
-<p>A camada semântica resolve isso tirando a fórmula da ferramenta e colocando no repositório:</p>
+<p>A semantic layer resolve isso tirando a fórmula da ferramenta e colocando no repositório:</p>
 <pre><code>metrics:
   - name: receita_liquida
     description: "Bruto menos descontos, pedidos pagos"
     type: derived
     expr: receita_bruta - descontos</code></pre>
 <p>Agora a métrica é código. Passa por PR, tem revisão, tem teste. O BI, o notebook e o agente pedem <code>receita_liquida</code> pelo nome e recebem o mesmo número. Se ele estiver errado, está errado num lugar só, e você corrige num lugar só.</p>
-<p>E tem um efeito colateral que ficou enorme com a IA: <b>a descrição das métricas é exatamente o contexto que um agente precisa para acertar a pergunta</b>. Um agente lendo tabela crua adivinha o que é receita. Um agente lendo a camada semântica sabe.</p>
+<p>E tem um efeito colateral que ficou enorme com a IA: <b>a descrição das métricas é exatamente o contexto que um agente precisa para acertar a pergunta</b>. Um agente lendo tabela crua adivinha o que é receita. Um agente lendo a semantic layer sabe.</p>
 
-<h3><span>05</span>Autosserviço só em tabela certificada</h3>
-<p>Nem toda tabela do projeto deveria estar à vista. Eu separo o que é interno do time de dados do que é <b>data product</b>: uma tabela com dono, contrato e SLA, que qualquer pessoa pode usar sem pedir ajuda.</p>
+<h3><span>05</span>Self-service só em tabela certificada</h3>
+<p>Nem toda tabela do projeto deveria estar à vista. Eu separo o que é interno do time de dados do que é <b>data product</b>: uma tabela com owner, contract e SLA, que qualquer pessoa pode usar sem pedir ajuda.</p>
 <p>Para decidir se uma tabela está pronta, uso um scorecard simples de seis critérios:</p>
 <div class="tbl"><table>
 <thead><tr><th>Critério</th><th>Como verificar</th></tr></thead>
 <tbody>
-<tr><td>Dono nomeado</td><td><code>meta: owner</code> preenchido no YAML</td></tr>
+<tr><td>Owner nomeado</td><td><code>meta: owner</code> preenchido no YAML</td></tr>
 <tr><td>Documentação</td><td>descrição da tabela e de todas as colunas</td></tr>
-<tr><td>Testes de chave e grão</td><td><code>unique</code> e <code>not_null</code> na chave primária</td></tr>
-<tr><td>Contrato de schema</td><td><code>contract: enforced: true</code></td></tr>
+<tr><td>Testes de chave e grain</td><td><code>unique</code> e <code>not_null</code> na chave primária</td></tr>
+<tr><td>Schema contract</td><td><code>contract: enforced: true</code></td></tr>
 <tr><td>SLA de freshness</td><td>combinado com quem consome</td></tr>
 <tr><td>Versionamento</td><td>v1 e v2 com período de transição</td></tr>
 </tbody></table></div>
-<p>Com três critérios, a tabela é <b>bronze</b>: uso interno do domínio. Com quatro ou cinco, é <b>prata</b>: entra no catálogo com aviso de que pode mudar. Com os seis, é <b>ouro</b>: pronta para autosserviço e para sistemas consumirem.</p>
-<p>O critério que mais faz diferença é o contrato. Com ele, quem quebra o schema é o PR, e não o dashboard de alguém na segunda-feira de manhã.</p>
+<p>Com três critérios, a tabela é <b>bronze</b>: uso interno do domínio. Com quatro ou cinco, é <b>silver</b>: entra no catálogo com aviso de que pode mudar. Com os seis, é <b>gold</b>: pronta para self-service e para sistemas consumirem.</p>
+<p>O critério que mais faz diferença é o contract. Com ele, quem quebra o schema é o PR, e não o dashboard de alguém na segunda-feira de manhã.</p>
 
-<h3><span>06</span>Todo erro tem dono pela camada</h3>
+<h3><span>06</span>Todo erro tem owner pela camada</h3>
 <p>Pipeline vai quebrar. A pergunta não é se, é quem corrige. E a camada onde o erro nasceu responde isso:</p>
 <ul>
 <li><b>Erro de modelagem</b> (duplicidade num mart, regra errada) → Analytics Engineering abre PR.</li>
-<li><b>Erro de ingestão</b> (fonte atrasada, sync que falhou) → Data Engineering.</li>
-<li><b>Gap na origem</b> (campo obrigatório chegando nulo) → volta para o time da aplicação.</li>
+<li><b>Erro de ingestão</b> (source atrasada, sync que falhou) → Data Engineering.</li>
+<li><b>Gap na source</b> (campo obrigatório chegando nulo) → volta para o time da aplicação.</li>
 </ul>
-<p>Junto com isso, uso severidade graduada nos testes. <code>error</code> só no que é crítico: as fontes e chaves que, se quebradas, invalidam tudo o que vem depois. O resto é <code>warn</code>, que avisa, registra e deixa o pipeline seguir. Um projeto onde tudo é <code>error</code> para por qualquer coisa, e o time aprende a ignorar alertas.</p>
+<p>Junto com isso, uso severidade graduada nos testes. <code>error</code> só no que é crítico: as sources e chaves que, se quebradas, invalidam tudo o que vem depois. O resto é <code>warn</code>, que avisa, registra e deixa o pipeline seguir. Um projeto onde tudo é <code>error</code> para por qualquer coisa, e o time aprende a ignorar alertas.</p>
 <p>E vale colocar no checklist de review os bugs que se repetem. O meu favorito: <code>coalesce(col, ' ')</code> com espaço, em vez de string vazia, dentro de uma surrogate key. Muda o hash, a chave nunca bate e o merge vira um insert eterno. Parece detalhe até você passar uma tarde inteira procurando.</p>
 
 <h2>Por onde começar amanhã</h2>
 <p>Você não precisa reescrever o projeto. Comece medindo onde ele está:</p>
 <ul class="checks">
 <li>Procure o mesmo <code>CASE WHEN</code> em mais de um mart. Cada repetição é uma intermediate esperando para existir.</li>
-<li>Para cada origem, responda: como eu descubro que algo deixou de existir? Confira se a materialização bate com a resposta.</li>
-<li>Liste as tabelas que alguém fora do time de dados lê hoje. Quantas têm dono, contrato e testes de chave?</li>
-<li>Escolha a métrica que mais gera discussão em reunião e leve para a camada semântica primeiro.</li>
+<li>Para cada source, responda: como eu descubro que algo deixou de existir? Confira se a materialization bate com a resposta.</li>
+<li>Liste as tabelas que alguém fora do time de dados lê hoje. Quantas têm owner, contract e testes de chave?</li>
+<li>Escolha a métrica que mais gera discussão em reunião e leve para a semantic layer primeiro.</li>
 <li>Revise a severidade dos testes. Se tudo é <code>error</code>, rebaixe o que não invalida o resto.</li>
 <li>Escreva quem corrige o quê, por camada, num lugar onde o time inteiro veja.</li>
 </ul>
 <p>Uma mudança por sprint já muda o jogo em poucos meses.</p>
 
 <h2>Fechando</h2>
-<p>Autosserviço não é dar acesso ao banco e torcer. É decidir, com antecedência, por qual caminho cada pessoa chega ao número, e garantir que todos os caminhos passem pela mesma definição.</p>
+<p>Self-service não é dar acesso ao banco e torcer. É decidir, com antecedência, por qual caminho cada pessoa chega ao número, e garantir que todos os caminhos passem pela mesma definição.</p>
 <p>As camadas dão o lugar de cada coisa. As seis decisões fazem esse lugar continuar fazendo sentido quando o time dobra, quando a regra muda e quando um agente de IA começa a fazer perguntas no lugar de um analista.</p>
-<div class="cta">Explore o <a href="./">mapa interativo</a>: o simulador de materialização, o antes e depois da camada semântica, o scorecard de data product e o roteamento de incidentes.</div>
+<div class="cta">Explore o <a href="./">mapa interativo</a>: o simulador de materialization, o antes e depois da semantic layer, o scorecard de data product e o roteamento de incidentes.</div>
 <p>E me conta: qual dessas seis decisões mais falta no seu projeto hoje?</p>
 <p class="bio">Erika Medeiros é Analytics Engineer especializada em crédito e arquitetura de dados com dbt e Databricks.</p>
 </article>

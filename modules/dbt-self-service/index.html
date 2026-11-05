@@ -3,14 +3,14 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="description" content="Arquitetura de referência dbt + autosserviço: camadas, camada semântica, data products e consumo, com demos interativas.">
+<meta name="description" content="Arquitetura de referência dbt + self-service: camadas, semantic layer, data products e consumo, com demos interativas.">
 <style>:root{color-scheme:light}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
 <title>Mapa dbt Self-Service</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700;900&family=Geist+Mono:wght@400;500;600&display=swap">
 <style>
-/* Layout: mapa de referência em 4 colunas (origem → plataforma dbt → camada de produto → autosserviço) + três faixas de base + princípios; cada bloco abre folha com texto e demo */
+/* Layout: mapa de referência em 4 colunas (source → plataforma dbt → camada de produto → self-service) + três faixas de base + princípios; cada bloco abre folha com texto e demo */
 :root{
   --bg:#FFFFFF; --card:#FFFFFF; --sunk:#F7F3F2; --ink:#333131; --muted:#68615A; --line:#E4E0DD;
   --c1:#356D3E; --c2:#34639C; --c3:#7E527A; --c4:#94632B; --c5:#B23B51;
@@ -212,7 +212,7 @@ pre.code{margin:0;font-family:var(--f-mono);font-size:12px;line-height:1.55;back
   <header class="top">
     <div>
       <div class="eyebrow">arquitetura de referência · analytics engineering</div>
-      <h1>Do dado bruto ao <em>autosserviço</em>, sem perder o controle.</h1>
+      <h1>Do raw data ao <em>self-service</em>, sem perder o controle.</h1>
       <p>Um mapa de como organizar um projeto dbt para que analistas, cientistas, sistemas e agentes de IA se sirvam sozinhos, cada um consumindo a mesma definição de negócio.</p>
       <div class="by">por <b>Erika Medeiros</b> · Analytics Engineering</div>
     </div>
@@ -227,7 +227,7 @@ pre.code{margin:0;font-family:var(--f-mono);font-size:12px;line-height:1.55;back
     <svg class="links" id="links" aria-hidden="true"></svg>
     <div class="cols">
       <div class="col">
-        <div class="colhead"><b>01</b>Origens</div>
+        <div class="colhead"><b>01</b>Sources</div>
         <button class="node src" data-node="fontes" data-k="s1" type="button"><span class="logo">ERP</span><span class="tt"><b>ERP</b><span>eventos com timestamp</span></span></button>
         <button class="node src" data-node="fontes" data-k="s2" type="button"><span class="logo">CDC</span><span class="tt"><b>Bancos via CDC</b><span>insert, update, delete</span></span></button>
         <button class="node src" data-node="fontes" data-k="s3" type="button"><span class="logo">API</span><span class="tt"><b>SaaS e parceiros</b><span>snapshot de posição</span></span></button>
@@ -241,8 +241,8 @@ pre.code{margin:0;font-family:var(--f-mono);font-size:12px;line-height:1.55;back
           <div class="plat-l"><span><b>Lakehouse</b> · tabelas Delta / Iceberg</span><span>dbt Core ou Cloud</span></div>
           <button class="node" data-node="staging" data-k="stg" type="button">
             <span class="t"><span class="badge" style="background:var(--c1)">1</span>Staging</span>
-            <span class="s">espelho tipado da origem, sem regra de negócio</span>
-            <span class="chips"><span class="chip">stg_&lt;fonte&gt;__&lt;tabela&gt;</span><span class="chip">sources.yml</span><span class="chip">freshness</span></span>
+            <span class="s">espelho tipado da source, sem regra de negócio</span>
+            <span class="chips"><span class="chip">stg_&lt;source&gt;__&lt;tabela&gt;</span><span class="chip">sources.yml</span><span class="chip">freshness</span></span>
           </button>
           <button class="node" data-node="intermediate" data-k="int" type="button">
             <span class="t"><span class="badge" style="background:var(--c2)">2</span>Intermediate</span>
@@ -259,22 +259,22 @@ pre.code{margin:0;font-family:var(--f-mono);font-size:12px;line-height:1.55;back
       <div class="col">
         <div class="colhead"><b>03</b>Camada de produto</div>
         <div class="prod">
-          <div class="prod-l">o que o autosserviço enxerga</div>
+          <div class="prod-l">o que o self-service enxerga</div>
           <button class="node sem" data-node="semantica" data-k="sem" type="button">
-            <span class="t"><span class="badge" style="background:var(--c3)">4</span>Camada semântica</span>
+            <span class="t"><span class="badge" style="background:var(--c3)">4</span>Semantic layer</span>
             <span class="s">métricas e dimensões com uma definição só</span>
             <span class="metric"><b>receita_liquida</b> = sum(vl_bruto) − sum(vl_desconto)</span>
           </button>
           <button class="node" data-node="produtos" data-k="dp" type="button">
             <span class="t"><span class="badge" style="background:var(--c5)">5</span>Data products</span>
-            <span class="s">tabelas certificadas com dono, contrato e SLA</span>
-            <span class="tiers"><span class="pill d">bronze</span><span class="pill a">prata</span><span class="pill c">ouro</span></span>
+            <span class="s">tabelas certificadas com owner, contract e SLA</span>
+            <span class="tiers"><span class="pill d">bronze</span><span class="pill a">silver</span><span class="pill c">gold</span></span>
           </button>
         </div>
       </div>
 
       <div class="col">
-        <div class="colhead"><b>04</b>Autosserviço</div>
+        <div class="colhead"><b>04</b>Self-service</div>
         <button class="node persona" data-node="consumo" data-k="c1" type="button"><span class="ic" style="background:var(--t3);color:var(--c3)">BI</span><span><span class="t">Analistas</span><span class="s">dashboards e exploração</span></span></button>
         <button class="node persona" data-node="consumo" data-k="c2" type="button"><span class="ic" style="background:var(--t2);color:var(--c2)">Py</span><span><span class="t">Cientistas</span><span class="s">notebooks e features</span></span></button>
         <button class="node persona" data-node="consumo" data-k="c3" type="button"><span class="ic" style="background:var(--t5);color:var(--c5)">AI</span><span><span class="t">Agentes de IA</span><span class="s">perguntas via MCP</span></span></button>
@@ -284,22 +284,22 @@ pre.code{margin:0;font-family:var(--f-mono);font-size:12px;line-height:1.55;back
 
     <div class="base">
       <div class="lbl">Por baixo de tudo</div>
-      <button class="node band" data-node="cicd" type="button"><span class="ic" style="background:var(--t1);color:var(--c1)">CI</span><span><span class="t">CI/CD e orquestração</span><span class="s">PR, slim CI, deploy, agenda</span></span></button>
-      <button class="node band" data-node="qualidade" type="button"><span class="ic" style="background:var(--t2);color:var(--c2)">✓</span><span><span class="t">Qualidade</span><span class="s">testes, freshness, incidentes</span></span></button>
+      <button class="node band" data-node="cicd" type="button"><span class="ic" style="background:var(--t1);color:var(--c1)">CI</span><span><span class="t">CI/CD e orquestração</span><span class="s">PR, slim CI, deploy, schedule</span></span></button>
+      <button class="node band" data-node="qualidade" type="button"><span class="ic" style="background:var(--t2);color:var(--c2)">✓</span><span><span class="t">Data quality</span><span class="s">testes, freshness, incidentes</span></span></button>
       <button class="node band" data-node="governanca" type="button"><span class="ic" style="background:var(--t5);color:var(--c5)">⚿</span><span><span class="t">Governança</span><span class="s">domínios, acesso, catálogo</span></span></button>
     </div>
   </section>
 
   <section class="principles">
-    <h2>Seis decisões que sustentam o autosserviço</h2>
+    <h2>Seis decisões que sustentam o self-service</h2>
     <p>O mapa mostra onde as coisas ficam. Estas são as decisões que fazem ele funcionar quando o time cresce. Clique para ver cada uma em ação.</p>
     <div class="pgrid">
-      <button class="pc" data-node="intermediate" type="button"><span class="n">01</span><h3>Cada camada isola um tipo de mudança</h3><p>Mudou o schema da origem, mexe na staging. Mudou a regra, mexe na intermediate. Mudou o formato de saída, mexe no mart.</p><span class="go">ver em Intermediate →</span></button>
-      <button class="pc" data-node="fontes" type="button"><span class="n">02</span><h3>A materialização segue o comportamento da origem</h3><p>Evento com timestamp aceita incremental. Tabela que sobrescreve a linha pede full refresh e snapshot.</p><span class="go">ver em Origens →</span></button>
+      <button class="pc" data-node="intermediate" type="button"><span class="n">01</span><h3>Cada camada isola um tipo de mudança</h3><p>Mudou o schema da source, mexe na staging. Mudou a regra, mexe na intermediate. Mudou o formato de saída, mexe no mart.</p><span class="go">ver em Intermediate →</span></button>
+      <button class="pc" data-node="fontes" type="button"><span class="n">02</span><h3>A materialization segue o comportamento da source</h3><p>Evento com timestamp aceita incremental. Tabela que sobrescreve a linha pede full refresh e snapshot.</p><span class="go">ver em Sources →</span></button>
       <button class="pc" data-node="snapshots" type="button"><span class="n">03</span><h3>Histórico é uma responsabilidade explícita</h3><p>Quem guarda o passado é o snapshot. O modelo de cima pode ser reconstruído sem perder nada.</p><span class="go">ver em Snapshots →</span></button>
-      <button class="pc" data-node="semantica" type="button"><span class="n">04</span><h3>Uma métrica, uma definição</h3><p>BI, notebook e agente de IA leem a mesma fórmula. Se dois números divergem, o problema aparece num lugar só.</p><span class="go">ver em Camada semântica →</span></button>
-      <button class="pc" data-node="produtos" type="button"><span class="n">05</span><h3>Autosserviço só em tabela certificada</h3><p>Dono, contrato, testes, SLA e documentação. Sem isso, a tabela é de uso interno do time de dados.</p><span class="go">ver em Data products →</span></button>
-      <button class="pc" data-node="qualidade" type="button"><span class="n">06</span><h3>Todo erro tem dono pela camada</h3><p>Falha de modelagem vira PR de Analytics Engineering. Falha de ingestão vai para Data Engineering. Gap na origem volta para a aplicação.</p><span class="go">ver em Qualidade →</span></button>
+      <button class="pc" data-node="semantica" type="button"><span class="n">04</span><h3>Uma métrica, uma definição</h3><p>BI, notebook e agente de IA leem a mesma fórmula. Se dois números divergem, o problema aparece num lugar só.</p><span class="go">ver em Semantic layer →</span></button>
+      <button class="pc" data-node="produtos" type="button"><span class="n">05</span><h3>Self-service só em tabela certificada</h3><p>Owner, contract, testes, SLA e documentação. Sem isso, a tabela é de uso interno do time de dados.</p><span class="go">ver em Data products →</span></button>
+      <button class="pc" data-node="qualidade" type="button"><span class="n">06</span><h3>Todo erro tem owner pela camada</h3><p>Falha de modelagem vira PR de Analytics Engineering. Falha de ingestão vai para Data Engineering. Gap na source volta para a aplicação.</p><span class="go">ver em Data quality →</span></button>
     </div>
   </section>
   <p class="foot">Nomes de modelos, métricas e números das demos são exemplos. Leia o raciocínio completo no <a href="artigo.html">artigo</a>.</p>
@@ -340,58 +340,58 @@ const later=(fn,ms)=>timers.push(setTimeout(fn,ms));
 const clearT=()=>{timers.forEach(clearTimeout);timers=[]};
 
 const N={
-fontes:{name:'Origens',kick:'01 · Origens',title:'Antes de modelar, entenda como a origem se comporta.',
- lead:'A primeira decisão de arquitetura não é a ferramenta. É saber se a origem registra eventos, sobrescreve linhas ou apaga registros. É isso que define a materialização lá na frente.',
+fontes:{name:'Sources',kick:'01 · Sources',title:'Antes de modelar, entenda como a source se comporta.',
+ lead:'A primeira decisão de arquitetura não é a ferramenta. É saber se a source registra eventos, sobrescreve linhas ou apaga registros. É isso que define a materialization lá na frente.',
  bul:[['ts','Tem timestamp confiável?','Então dá para trazer só o que mudou, com incremental e merge.'],
       ['↻','Sobrescreve a linha?','Uma baixa vira ausência. Incremental não enxerga ausência: use full refresh e guarde o histórico em snapshot.'],
       ['Δ','Chega por CDC?','Use a operação (I, U, D) e a ordem do log para reconstruir o estado.']],
  tip:['Pergunta-chave','"como eu descubro que algo deixou de existir?"'],
- dt:'Qual materialização usar?',demo:demoFontes},
-staging:{name:'Staging',kick:'02 · Plataforma dbt · camada 1',title:'Um espelho tipado da origem.',
+ dt:'Qual materialization usar?',demo:demoFontes},
+staging:{name:'Staging',kick:'02 · Plataforma dbt · camada 1',title:'Um espelho tipado da source.',
  lead:'Staging responde uma pergunta só: o que chegou, exatamente? Renomeia, tipa e padroniza. Nenhum join, nenhuma regra de negócio.',
- bul:[['1:1','Um modelo por tabela de origem','stg_<fonte>__<tabela>, sempre a partir de um source declarado.'],
+ bul:[['1:1','Um modelo por tabela de source','stg_<source>__<tabela>, sempre a partir de um source declarado.'],
       ['Aa','Convenção de nomes por prefixo','sk_, nk_, fl_, vl_, dt_, dc_ dizem o papel da coluna sem abrir a documentação.'],
-      ['⏱','Freshness por fonte','Cada source declara quanto atraso tolera e com qual severidade.']],
+      ['⏱','Freshness por source','Cada source declara quanto atraso tolera e com qual severidade.']],
  tip:['Teste rápido','um AE novo entende a staging sem conhecer o negócio?'],
- dt:'Origem → staging',demo:demoStaging},
+ dt:'Source → staging',demo:demoStaging},
 intermediate:{name:'Intermediate',kick:'02 · Plataforma dbt · camada 2',title:'A regra de negócio mora num lugar só.',
  lead:'A intermediate é onde "cliente ativo" ou "débito em aberto" ganha uma definição. Os marts reaproveitam, em vez de cada um reescrever a lógica.',
  bul:[['1','Uma pergunta por modelo','int_<entidade>_<verbo>: o nome diz o que o modelo resolve.'],
       ['↯','Muda num ponto, propaga sozinho','Uma regra centralizada transforma uma mudança de negócio num único PR.'],
-      ['≠','Materialização por modelo','Não existe regra única para o projeto. Cada intermediate escolhe a sua conforme a origem.']],
+      ['≠','Materialization por modelo','Não existe regra única para o projeto. Cada intermediate escolhe a sua conforme a source.']],
  tip:['Sinal de alerta','o mesmo CASE WHEN copiado em dois marts'],
  dt:'Quando a regra muda',demo:demoInt},
 snapshots:{name:'Snapshots',kick:'02 · Plataforma dbt · histórico',title:'Quem guarda o passado precisa ser explícito.',
- lead:'Se a origem só conhece o estado atual, o histórico tem que ser construído por você. O snapshot do dbt grava uma versão nova a cada mudança real.',
- bul:[['✓',"strategy='check'",'Use quando a origem não tem um updated_at confiável.'],
+ lead:'Se a source só conhece o estado atual, o histórico tem que ser construído por você. O snapshot do dbt grava uma versão nova a cada mudança real.',
+ bul:[['✓',"strategy='check'",'Use quando a source não tem um updated_at confiável.'],
       ['⊘','Cuidado com check_cols','Um campo que muda todo dia sem evento de negócio (dias de atraso, idade) cria versões inúteis.'],
       ['⟲','Modelos de cima viram descartáveis','Com o histórico guardado, qualquer mart pode ser reconstruído com full refresh.']],
- tip:['Bônus','datas que a origem não tem (ex.: data de quitação) saem do dbt_valid_from'],
+ tip:['Bônus','datas que a source não tem (ex.: data de quitação) saem do dbt_valid_from'],
  dt:'Histórico de um cliente',demo:demoSnap},
 marts:{name:'Marts',kick:'02 · Plataforma dbt · camada 3',title:'Fatos e dimensões que qualquer um consegue ler.',
- lead:'O mart traduz o modelo de negócio em estrela: fatos com o grão bem definido e dimensões que dizem quem, o quê, quando e onde.',
- bul:[['◇','Grão declarado na documentação','"Uma linha por pedido e item" vale mais que qualquer diagrama.'],
+ lead:'O mart traduz o modelo de negócio em estrela: fatos com o grain bem definido e dimensões que dizem quem, o quê, quando e onde.',
+ bul:[['◇','Grain declarado na documentação','"Uma linha por pedido e item" vale mais que qualquer diagrama.'],
       ['⇄','Dimensões com tipo escolhido','SCD1 para o que só importa hoje, SCD2 para o que precisa de vigência.'],
       ['+','Append-only ou posição atual','Fatos de evento só crescem. Tabelas de posição fazem upsert e respondem "como está agora?".']],
  tip:['Clique','nas dimensões ao lado para ver quando usar cada tipo'],
  dt:'Uma estrela típica',demo:demoMarts},
-semantica:{name:'Camada semântica',kick:'03 · Camada de produto · 4',title:'Uma métrica, uma definição, qualquer ferramenta.',
- lead:'Sem camada semântica, cada dashboard reimplementa a métrica. Com ela, a fórmula é versionada no repositório e BI, notebook e IA pedem o número pelo nome.',
+semantica:{name:'Semantic layer',kick:'03 · Camada de produto · 4',title:'Uma métrica, uma definição, qualquer ferramenta.',
+ lead:'Sem semantic layer, cada dashboard reimplementa a métrica. Com ela, a fórmula é versionada no repositório e BI, notebook e IA pedem o número pelo nome.',
  bul:[['ƒ','Métricas como código','Definidas em YAML, revisadas em PR, testadas como qualquer modelo.'],
       ['◎','Dimensões permitidas','A métrica declara por onde pode ser cortada, evitando somas sem sentido.'],
       ['AI','O contexto que a IA precisa','Descrição de métricas e entidades é o que faz um agente acertar a pergunta.']],
  tip:['Teste de maturidade','dois times trazem o mesmo número para a reunião?'],
- dt:'Sem × com camada semântica',demo:demoSem},
-produtos:{name:'Data products',kick:'03 · Camada de produto · 5',title:'Autosserviço só em tabela certificada.',
- lead:'Um data product é uma tabela com dono, contrato e SLA. É a fronteira entre o que é interno do time de dados e o que qualquer pessoa pode usar sem pedir ajuda.',
- bul:[['⚑','Dono nomeado','Uma pessoa ou time responde por ela. Sem dono, não é produto.'],
-      ['§','Contrato de schema','Colunas e tipos garantidos com contract enforced. Quebrar o contrato quebra o PR, não o consumidor.'],
-      ['★','Níveis de certificação','Bronze, prata e ouro dizem ao consumidor quanto ele pode confiar.']],
+ dt:'Sem × com semantic layer',demo:demoSem},
+produtos:{name:'Data products',kick:'03 · Camada de produto · 5',title:'Self-service só em tabela certificada.',
+ lead:'Um data product é uma tabela com owner, contract e SLA. É a fronteira entre o que é interno do time de dados e o que qualquer pessoa pode usar sem pedir ajuda.',
+ bul:[['⚑','Owner nomeado','Uma pessoa ou time responde por ela. Sem owner, não é produto.'],
+      ['§','Schema contract','Colunas e tipos garantidos com contract enforced. Quebrar o contract quebra o PR, não o consumidor.'],
+      ['★','Níveis de certificação','Bronze, silver e gold dizem ao consumidor quanto ele pode confiar.']],
  tip:['Marque os critérios','ao lado e veja em que nível a tabela chega'],
  dt:'Scorecard de prontidão',demo:demoProd},
-consumo:{name:'Autosserviço',kick:'04 · Autosserviço',title:'Quatro jeitos de consumir, uma fonte da verdade.',
+consumo:{name:'Self-service',kick:'04 · Self-service',title:'Quatro jeitos de consumir, uma single source of truth.',
  lead:'Cada perfil consome por um caminho diferente. A arquitetura garante que todos passem pela camada de produto, e não pelo meio do encanamento.',
- bul:[['BI','Analistas','Leem métricas da camada semântica pela ferramenta de BI.'],
+ bul:[['BI','Analistas','Leem métricas da semantic layer pela ferramenta de BI.'],
       ['AI','Agentes de IA','Perguntam em linguagem natural via MCP e leem o mesmo contexto descrito.'],
       ['{ }','Sistemas','Puxam tabelas certificadas por API ou recebem de volta via reverse ETL.']],
  tip:['Regra de ouro','ninguém fora do time de dados lê staging ou intermediate'],
@@ -399,22 +399,22 @@ consumo:{name:'Autosserviço',kick:'04 · Autosserviço',title:'Quatro jeitos de
 cicd:{name:'CI/CD e orquestração',kick:'Base · CI/CD',title:'Nada chega em produção sem passar pelo PR.',
  lead:'Todo modelo entra por pull request. O CI constrói só o que mudou e o que depende disso, roda os testes e só então libera o merge.',
  bul:[['±','Slim CI','dbt build --select state:modified+ com --defer: rápido e barato.'],
-      ['☑','Checklist de review','Grão, unique_key, coalesce nas surrogate keys, timestamps truncados.'],
-      ['⏰','Orquestração por dependência','Agenda por tempo ou por evento, com retry por task e alerta por duração.']],
+      ['☑','Checklist de review','Grain, unique_key, coalesce nas surrogate keys, timestamps truncados.'],
+      ['⏰','Orquestração por dependência','Schedule por tempo ou por evento, com retry por task e alerta por duração.']],
  tip:['Pegadinha comum',"coalesce(col, ' ') com espaço muda o hash da chave"],
  dt:'Do PR à produção',demo:demoCi},
-qualidade:{name:'Qualidade',kick:'Base · Qualidade',title:'Teste com severidade, erro com dono.',
+qualidade:{name:'Data quality',kick:'Base · Data quality',title:'Teste com severidade, erro com owner.',
  lead:'Nem todo teste deve parar o pipeline. A severidade diz o que bloqueia, e a camada onde o erro nasceu diz quem corrige.',
- bul:[['!','error só no que é crítico','Fontes e chaves que, se quebradas, invalidam tudo o que vem depois.'],
+ bul:[['!','error só no que é crítico','Sources e chaves que, se quebradas, invalidam tudo o que vem depois.'],
       ['w','warn como padrão','Avisa, registra e deixa o pipeline seguir.'],
-      ['↯','Roteamento pela camada','Modelagem, ingestão ou origem: cada uma tem um dono diferente.']],
+      ['↯','Roteamento pela camada','Modelagem, ingestão ou source: cada uma tem um owner diferente.']],
  tip:['Observabilidade','custo por job e duração por modelo também são métricas de qualidade'],
  dt:'Para onde vai o incidente',demo:demoQual},
 governanca:{name:'Governança',kick:'Base · Governança',title:'Cada pessoa, e cada agente, vê só o que deve.',
- lead:'Governança em autosserviço é decidir o que fica exposto. Domínios organizam a propriedade e o acesso segue as camadas.',
- bul:[['◫','Domínios com dono','Crédito, vendas, operações: cada domínio publica seus próprios produtos.'],
+ lead:'Governança em self-service é decidir o que fica exposto. Domínios organizam a propriedade e o acesso segue as camadas.',
+ bul:[['◫','Domínios com owner','Crédito, vendas, operações: cada domínio publica seus próprios produtos.'],
       ['⚿','Acesso por camada','O perfil define até onde a pessoa enxerga. O agente herda o acesso de quem o usa.'],
-      ['▤','Catálogo como porta de entrada','Descrição, dono, nível e linhagem de cada tabela num só lugar.']],
+      ['▤','Catálogo como porta de entrada','Descrição, owner, nível e lineage de cada tabela num só lugar.']],
  tip:['Princípio','dado sensível mascarado na staging, nunca no dashboard'],
  dt:'Matriz de acesso',demo:demoGov}
 };
@@ -434,7 +434,7 @@ function demoFontes(el){
 }
 function demoStaging(el){
  const m=[['CUST_ID','nk_cliente','string'],['VLR_TOT','vl_total','decimal(18,2)'],['DT_VENC','dt_vencimento','date'],['STS','dc_status','string'],['IND_ATV','fl_ativo','boolean'],['—','sk_cliente','md5(nk_cliente)']];
- el.innerHTML=`<div class="tbl-wrap"><table class="t"><thead><tr><th>origem</th><th></th><th>staging</th><th>tipo</th></tr></thead><tbody id="sm"></tbody></table></div>
+ el.innerHTML=`<div class="tbl-wrap"><table class="t"><thead><tr><th>source</th><th></th><th>staging</th><th>tipo</th></tr></thead><tbody id="sm"></tbody></table></div>
  <div class="sub">Prefixos</div><div class="chips">${[['sk_','surrogate key'],['nk_','chave natural'],['fl_','flag'],['vl_','valor'],['dt_','data'],['dc_','descrição']].map(p=>`<span class="chip"><b style="color:var(--ink)">${p[0]}</b> ${p[1]}</span>`).join('')}</div>
  <p class="note">Nenhuma coluna foi calculada. Só renomeada, tipada e com chave gerada.</p>`;
  m.forEach((x,i)=>later(()=>{const tr=document.createElement('tr');tr.className='newrow';tr.innerHTML=`<td class="mono" style="color:var(--muted)">${x[0]}</td><td style="color:var(--muted)">→</td><td class="mono"><b>${x[1]}</b></td><td class="mono" style="color:var(--muted)">${x[2]}</td>`;$('#sm').appendChild(tr)},200+i*280));
@@ -454,14 +454,14 @@ function demoInt(el){
 }
 function demoSnap(el){
  const v=[['10/01','Básico','28/03'],['28/03','Pro','15/08'],['15/08','Pro · cancelado','null']];
- el.innerHTML=`<div class="grid2"><div><div class="sub" style="margin-top:0">Origem (só o agora)</div><div class="box mono" id="snow" style="font-size:12px"></div></div><div><div class="sub" style="margin-top:0">Pergunta</div><div class="box" style="font-size:13.5px">Qual era o plano do cliente em junho?</div></div></div>
+ el.innerHTML=`<div class="grid2"><div><div class="sub" style="margin-top:0">Source (só o agora)</div><div class="box mono" id="snow" style="font-size:12px"></div></div><div><div class="sub" style="margin-top:0">Pergunta</div><div class="box" style="font-size:13.5px">Qual era o plano do cliente em junho?</div></div></div>
  <div class="sub">snp_cliente</div><div class="tbl-wrap"><table class="t"><thead><tr><th>dbt_valid_from</th><th>plano</th><th>dbt_valid_to</th></tr></thead><tbody id="sv"></tbody></table></div><div class="answer" id="sa" hidden></div>`;
  v.forEach((x,i)=>later(()=>{
   $('#snow').textContent='cliente 7731 · plano = '+x[1];
   if(i>0)$('#sv').rows[i-1].cells[2].textContent=v[i-1][2];
   const tr=document.createElement('tr');tr.className='newrow';tr.innerHTML=`<td class="mono">${x[0]}</td><td>${x[1]}</td><td class="mono">null</td>`;$('#sv').appendChild(tr);
  },300+i*900));
- later(()=>{const a=$('#sa');a.hidden=false;a.innerHTML='<b>Pro</b>Versão vigente entre 28/03 e 15/08. A origem já não sabe disso; o snapshot sabe.'},3200);
+ later(()=>{const a=$('#sa');a.hidden=false;a.innerHTML='<b>Pro</b>Versão vigente entre 28/03 e 15/08. A source já não sabe disso; o snapshot sabe.'},3200);
 }
 function demoMarts(el){
  const d=[['dim_cliente','SCD2','c','Quando atributos mudam e a análise precisa da versão vigente no momento do fato (segmento, plano).'],
@@ -477,7 +477,7 @@ function demoMarts(el){
  pick(0);[2,3,5].forEach((i,k)=>later(()=>pick(i),1200*(k+1)));
 }
 function demoSem(el){
- el.innerHTML=`<div class="seg" id="sseg"><button type="button" data-m="sem" class="on">sem camada semântica</button><button type="button" data-m="com">com camada semântica</button></div>
+ el.innerHTML=`<div class="seg" id="sseg"><button type="button" data-m="sem" class="on">sem semantic layer</button><button type="button" data-m="com">com semantic layer</button></div>
  <div class="sub">"Qual foi a receita de outubro?"</div>
  <div class="consumers" id="sc"></div>
  <div class="sub">Definição</div><pre class="code" id="sd"></pre>`;
@@ -497,17 +497,17 @@ function demoSem(el){
  show('sem');later(()=>show('com'),3000);
 }
 function demoProd(el){
- const c=[['Dono nomeado','meta: owner no YAML',1],['Descrição de tabela e colunas','tudo documentado no catálogo',1],['Testes de chave e grão','unique + not_null na PK',1],['Contrato de schema','contract: enforced: true',0],['SLA de freshness','acordado com quem consome',0],['Versionamento','v1, v2 com período de transição',0]];
+ const c=[['Owner nomeado','meta: owner no YAML',1],['Descrição de tabela e colunas','tudo documentado no catálogo',1],['Testes de chave e grain','unique + not_null na PK',1],['Schema contract','contract: enforced: true',0],['SLA de freshness','acordado com quem consome',0],['Versionamento','v1, v2 com período de transição',0]];
  el.innerHTML='<div class="rows">'+c.map((x,i)=>`<label class="check"><input type="checkbox" id="pc${i}" ${x[2]?'checked':''}><span>${x[0]}<small class="mono">${x[1]}</small></span></label>`).join('')+'</div><div class="score"><div class="bar"><i id="pb"></i></div><span class="tierbig" id="pt"></span></div><p class="note" id="pn"></p>';
  const up=()=>{const n=c.filter((_,i)=>$('#pc'+i).checked).length;$('#pb').style.width=(n/6*100)+'%';
-  let t,col,msg;if(n>=6){t='Ouro';col='var(--c3)';msg='Pronta para autosserviço e para consumo por sistemas.'}else if(n>=4){t='Prata';col='var(--c1)';msg='Pode ir para o catálogo, com aviso de que o contrato ainda pode mudar.'}else if(n>=3){t='Bronze';col='var(--c4)';msg='Uso interno do domínio. Ainda não entra no autosserviço.'}else{t='Rascunho';col='var(--muted)';msg='Não publique. Falta o mínimo para alguém confiar.'}
+  let t,col,msg;if(n>=6){t='Gold';col='var(--c3)';msg='Pronta para self-service e para consumo por sistemas.'}else if(n>=4){t='Silver';col='var(--c1)';msg='Pode ir para o catálogo, com aviso de que o contract ainda pode mudar.'}else if(n>=3){t='Bronze';col='var(--c4)';msg='Uso interno do domínio. Ainda não entra no self-service.'}else{t='Rascunho';col='var(--muted)';msg='Não publique. Falta o mínimo para alguém confiar.'}
   $('#pt').textContent=t;$('#pt').style.color=col;$('#pn').textContent=`${n} de 6 critérios. ${msg}`};
  c.forEach((_,i)=>$('#pc'+i).addEventListener('change',up));up();
  later(()=>{$('#pc3').checked=true;up()},1200);later(()=>{$('#pc4').checked=true;up()},2200);later(()=>{$('#pc5').checked=true;up()},3200);
 }
 function demoCons(el){
- const P=[['Analistas · BI','camada semântica'],['Cientistas · notebook','data products + marts'],['Agentes de IA · MCP','camada semântica + catálogo'],['Sistemas · API','data products ouro']];
- const L=['staging','intermediate','marts','data products','camada semântica'];
+ const P=[['Analistas · BI','semantic layer'],['Cientistas · notebook','data products + marts'],['Agentes de IA · MCP','semantic layer + catálogo'],['Sistemas · API','data products gold']];
+ const L=['staging','intermediate','marts','data products','semantic layer'];
  const map={0:[4],1:[2,3],2:[3,4],3:[3]};
  el.innerHTML=`<div class="opts" id="cp">${P.map((p,i)=>`<button class="opt" type="button" data-i="${i}">${p[0]}<small>${p[1]}</small></button>`).join('')}</div><div class="sub">Camadas que esse perfil lê</div><div class="rows" id="cl">${L.map((l,i)=>`<div class="r" data-l="${i}"><span class="nm">${l}</span><span class="pill" style="color:var(--muted)">—</span></div>`).join('')}</div>`;
  const pick=i=>{el.querySelectorAll('#cp .opt').forEach(b=>b.classList.toggle('on',+b.dataset.i===i));
@@ -516,24 +516,24 @@ function demoCons(el){
  [0,1,2,3].forEach((i,k)=>later(()=>pick(i),k*1300));
 }
 function demoCi(el){
- const S=['PR aberto','slim CI','testes','review','merge','deploy','agenda'];
+ const S=['PR aberto','slim CI','testes','review','merge','deploy','schedule'];
  el.innerHTML=`<div class="pipe" id="pp">${S.map((s,i)=>`<span class="ps" data-i="${i}">${s}</span>${i<S.length-1?'<span class="arr">→</span>':''}`).join('')}</div>
  <pre class="code" id="pl"></pre>
  <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:12px"><button class="btn" id="cok" type="button">PR saudável</button><button class="btn" id="cbad" type="button">PR com teste quebrado</button></div>`;
  const run=bad=>{clearT();const ps=el.querySelectorAll('.ps');ps.forEach(p=>p.className='ps');$('#pl').textContent='';
-  const log=['$ dbt build --select state:modified+ --defer','  12 modelos selecionados (3 alterados, 9 dependentes)',bad?'  FAIL unique_fct_pedido_item_sk_pedido_item  (148 duplicadas)':'  PASS 47 testes  ·  WARN 2','',bad?'✗ merge bloqueado: corrija o grão antes do review':'✓ aprovado, deploy e próxima execução agendada'];
+  const log=['$ dbt build --select state:modified+ --defer','  12 modelos selecionados (3 alterados, 9 dependentes)',bad?'  FAIL unique_fct_pedido_item_sk_pedido_item  (148 duplicadas)':'  PASS 47 testes  ·  WARN 2','',bad?'✗ merge bloqueado: corrija o grain antes do review':'✓ aprovado, deploy e próxima execução agendada'];
   S.forEach((_,i)=>later(()=>{if(bad&&i>2)return;ps[i].classList.add(bad&&i===2?'fail':'on')},200+i*380));
   log.forEach((l,i)=>later(()=>{$('#pl').textContent+=l+'\n'},400+i*420))};
  $('#cok').addEventListener('click',()=>run(false));$('#cbad').addEventListener('click',()=>run(true));later(()=>run(false),200);
 }
 function demoQual(el){
- const inc=[['Duplicidade no mart','modelagem','a'],['Fonte atrasada 6h','ingestão','b'],['Campo obrigatório nulo','origem','c']];
- const own={a:['Analytics Engineer','PR na camada de modelagem'],b:['Data Engineer','pipeline de ingestão'],c:['Time da aplicação','corrige na origem']};
+ const inc=[['Duplicidade no mart','modelagem','a'],['Source atrasada 6h','ingestão','b'],['Campo obrigatório nulo','source','c']];
+ const own={a:['Analytics Engineer','PR na camada de modelagem'],b:['Data Engineer','pipeline de ingestão'],c:['Time da aplicação','corrige na source']};
  el.innerHTML=`<div class="sub" style="margin-top:0">Alerta recebido</div><div class="route">${inc.map(x=>`<button class="inc" type="button" data-o="${x[2]}"><b>${x[0]}</b><br><span style="color:var(--muted);font-size:12px">camada: ${x[1]}</span></button>`).join('')}</div>
  <div style="text-align:center;color:var(--muted);margin:6px 0">↓ roteado para</div>
  <div class="route">${Object.entries(own).map(([k,v])=>`<div class="own" data-k="${k}"><b>${v[0]}</b><span style="color:var(--muted)">${v[1]}</span></div>`).join('')}</div>
  <div class="sub">Severidade</div><div class="tbl-wrap"><table class="t"><tbody>
- <tr><td>Fontes críticas, PK de data products</td><td><span class="pill x">error</span></td></tr>
+ <tr><td>Sources críticas, PK de data products</td><td><span class="pill x">error</span></td></tr>
  <tr><td>Demais testes de modelo</td><td><span class="pill w">warn</span></td></tr>
  <tr><td>Ramos "não classificado"</td><td><span class="pill c">expression_is_true graduado</span></td></tr></tbody></table></div>`;
  const pick=o=>{el.querySelectorAll('.inc').forEach(b=>b.classList.toggle('on',b.dataset.o===o));el.querySelectorAll('.own').forEach(b=>b.classList.toggle('on',b.dataset.k===o))};
@@ -541,7 +541,7 @@ function demoQual(el){
  ['a','b','c'].forEach((o,i)=>later(()=>pick(o),300+i*1200));
 }
 function demoGov(el){
- const L=['staging','intermediate','marts','data products','semântica'];
+ const L=['staging','intermediate','marts','data products','semantic layer'];
  const R={'Engenharia de dados':[1,1,1,1,1],'Analytics Engineer':[1,1,1,1,1],'Analista do domínio':[0,0,1,1,1],'Outros domínios':[0,0,0,1,1],'Agente de IA':['h','h','h','h','h']};
  el.innerHTML=`<div class="tbl-wrap"><table class="t acc"><thead><tr><th>perfil</th>${L.map(l=>`<th>${l}</th>`).join('')}</tr></thead><tbody>${Object.entries(R).map(([k,v])=>`<tr><td><b>${k}</b></td>${v.map(x=>x==='h'?'<td class="y">herda</td>':`<td class="${x?'y':'n'}">${x?'✓':'—'}</td>`).join('')}</tr>`).join('')}</tbody></table></div>
  <p class="note">O agente de IA não tem acesso próprio: enxerga exatamente o que a pessoa que o conectou enxerga, e cada consulta fica no log.</p>`;
